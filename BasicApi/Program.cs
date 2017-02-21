@@ -11,14 +11,10 @@ namespace BasicApi
 {
     class Program
     {
-        public static HttpClient client = new HttpClient();
-
         static void Main(string[] args)
         {
             PokemonApp.SetUpClient();
             PokemonApp.PokeApp();
         }
-
-        
     }
 }

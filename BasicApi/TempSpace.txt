@@ -1,0 +1,5 @@
+﻿public static Pokemon GetPokemon(string id)
+        {
+            var response = client.GetAsync($"pokemon/{id}/").Result;
+            return response.Content.ReadAsAsync<Pokemon>().Result;
+        }

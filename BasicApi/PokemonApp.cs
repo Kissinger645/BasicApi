@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace BasicApi
 {
-    class PokemonApp
+    public class PokemonApp
     {
         public static HttpClient client = new HttpClient();
 
@@ -36,23 +36,41 @@ namespace BasicApi
                 switch (input)
                 {
                     case "1":
-                        GetPokemonList();
+                        Console.Clear();
+                        PokemonList();
                         break;
+
                     case "2":
-                        GetPokemon();
+                        Console.Clear();
+                        var thisPoke = GetPokemon(Read("Enter name or Id of Pokemon"));
+                        Console.WriteLine(thisPoke.name);
+                        Console.WriteLine(thisPoke.height);
+                        Console.WriteLine(thisPoke.weight);
+                        Console.WriteLine(thisPoke.moves);
+                        Console.WriteLine("Press any key to return to the menu");
+                        Console.ReadKey();
                         break;
+
                     case "3":
-                        GetGameList();
+                        Console.Clear();
+                        GameList();
                         break;
+
                     case "4":
-                        GetGame();
+                        Console.Clear();
+                        GetGame(Read("Enter name or Id of Game"));
                         break;
+
                     case "5":
-                        GetItemList();
+                        Console.Clear();
+                        ItemList();
                         break;
+
                     case "6":
-                        GetItem();
+                        Console.Clear();
+                        GetItem(Read("Enter name or Id of Item"));
                         break;
+
                     default:
                         runAgain = false;
                         break;
@@ -67,36 +85,34 @@ namespace BasicApi
             client.BaseAddress = new Uri("http://pokeapi.co/api/v2/");
         }
 
-        public static GameList()
+        public static void GameList()
         {
-            var allGameResponse = client.GetAsync("game").Result;
-            GameCollection allPokemon = allGameResponse.Content.ReadAsAsync<GameCollection>().Result;
-            
+            var allGameResponse = client.GetAsync("generation").Result;
+            GameCollection allGames = allGameResponse.Content.ReadAsAsync<GameCollection>().Result;
         }
 
-        public static ItemList()
+        public static void ItemList()
         {
             var allGameResponse = client.GetAsync("item").Result;
-            ItemCollection allPokemon = allGameResponse.Content.ReadAsAsync<ItemCollection>().Result;
-
+            ItemCollection allItems = allGameResponse.Content.ReadAsAsync<ItemCollection>().Result;
         }
 
-        public static PokemonList()
+        public static void PokemonList()
         {
             var allPokemonResponse = client.GetAsync("pokemon").Result;
             PokemonCollection allPokemon = allPokemonResponse.Content.ReadAsAsync<PokemonCollection>().Result;
-
         }
 
-        static Pokemon GetPokemon(string id)
+        public static  Pokemon GetPokemon(string id)
         {
             var response = client.GetAsync($"pokemon/{id}/").Result;
             return response.Content.ReadAsAsync<Pokemon>().Result;
+
         }
 
-        static Game GetGame(string id)
+        public static Game GetGame(string id)
         {
-            var response = client.GetAsync($"game/{id}/").Result;
+            var response = client.GetAsync($"generation/{id}/").Result;
             return response.Content.ReadAsAsync<Game>().Result;
         }
 
@@ -105,7 +121,5 @@ namespace BasicApi
             var response = client.GetAsync($"item/{id}/").Result;
             return response.Content.ReadAsAsync<Item>().Result;
         }
-
-
     }
 }
