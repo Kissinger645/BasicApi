@@ -20,8 +20,6 @@ namespace BasicApi.Models
         public List<Type> types { get; set; }
     }
 
-    
-
     public class Language
     {
         public string url { get; set; }

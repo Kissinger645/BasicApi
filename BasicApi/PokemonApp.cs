@@ -38,11 +38,14 @@ namespace BasicApi
                     case "1":
                         Console.Clear();
                         PokemonList();
+                        Console.WriteLine("Press any key to return to the menu");
+                        Console.ReadKey();
                         break;
 
                     case "2":
                         Console.Clear();
                         var thisPoke = GetPokemon(Read("Enter name or Id of Pokemon"));
+                        Console.WriteLine();
                         Console.WriteLine(thisPoke.name);
                         Console.WriteLine(thisPoke.height);
                         Console.WriteLine(thisPoke.weight);
@@ -54,21 +57,33 @@ namespace BasicApi
                     case "3":
                         Console.Clear();
                         GameList();
+                        Console.WriteLine("Press any key to return to the menu");
+                        Console.ReadKey();
                         break;
 
                     case "4":
                         Console.Clear();
-                        GetGame(Read("Enter name or Id of Game"));
+                        var thisGame = GetGame(Read("Enter name or Id of Game"));
+                        Console.WriteLine(thisGame.name);
+                        Console.WriteLine(thisGame.version_groups);
+                        Console.WriteLine("Press any key to return to the menu");
+                        Console.ReadKey();
                         break;
 
                     case "5":
                         Console.Clear();
                         ItemList();
+                        Console.WriteLine("Press any key to return to the menu");
+                        Console.ReadKey();
                         break;
 
                     case "6":
                         Console.Clear();
-                        GetItem(Read("Enter name or Id of Item"));
+                        var thisItem = GetItem(Read("Enter name or Id of Item"));
+                        Console.WriteLine(thisItem.Name);
+                        Console.WriteLine(thisItem.AttributeName);
+                        Console.WriteLine("Press any key to return to the menu");
+                        Console.ReadKey();
                         break;
 
                     default:
