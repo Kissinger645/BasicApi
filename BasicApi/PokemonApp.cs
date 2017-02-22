@@ -37,7 +37,33 @@ namespace BasicApi
                 {
                     case "1":
                         Console.Clear();
-                        PokemonList();
+                        var allPokemonResponse = client.GetAsync("pokemon").Result;
+                        PokemonCollection allPokemon = allPokemonResponse.Content.ReadAsAsync<PokemonCollection>().Result;
+
+                        bool question = true;
+                        while (question == true)
+                        {
+                            foreach (var pokemon in allPokemon.Results)
+                            {
+                                Console.WriteLine(pokemon.name);
+                            }
+
+                            var answer = Read("Press 9 for the next page, 1 for the previous page or 0 to return to the menu");
+                            switch (answer)
+                            {
+                                case "1":
+                                    allPokemon = allPokemon.GetPrevious(client);
+                                    break;
+
+                                case "9":
+                                    allPokemon = allPokemon.GetNext(client);
+                                    break;
+
+                                default:
+                                    question = false;
+                                    break;
+                            }
+                        }
                         Console.WriteLine("Press any key to return to the menu");
                         Console.ReadKey();
                         break;
@@ -49,14 +75,23 @@ namespace BasicApi
                         Console.WriteLine(thisPoke.name);
                         Console.WriteLine(thisPoke.height);
                         Console.WriteLine(thisPoke.weight);
-                        Console.WriteLine(thisPoke.moves);
+                        foreach (var move in thisPoke.moves)
+                        {
+                            Console.WriteLine($"{move.move.name}");
+                        }
                         Console.WriteLine("Press any key to return to the menu");
                         Console.ReadKey();
                         break;
 
                     case "3":
                         Console.Clear();
-                        GameList();
+                        var allGameResponse = client.GetAsync("generation").Result;
+                        PokemonCollection allGame = allGameResponse.Content.ReadAsAsync<PokemonCollection>().Result;
+                        foreach (var game in allGame.Results)
+                        {
+                            Console.WriteLine(game.name);
+                        }
+
                         Console.WriteLine("Press any key to return to the menu");
                         Console.ReadKey();
                         break;
@@ -65,6 +100,10 @@ namespace BasicApi
                         Console.Clear();
                         var thisGame = GetGame(Read("Enter name or Id of Game"));
                         Console.WriteLine(thisGame.name);
+                        foreach (var name in thisGame.names)
+                        {
+                            Console.WriteLine($"{name.language.name}");
+                        }
                         Console.WriteLine(thisGame.version_groups);
                         Console.WriteLine("Press any key to return to the menu");
                         Console.ReadKey();
@@ -72,7 +111,12 @@ namespace BasicApi
 
                     case "5":
                         Console.Clear();
-                        ItemList();
+                        var allItemResponse = client.GetAsync("item").Result;
+                        PokemonCollection allItem = allItemResponse.Content.ReadAsAsync<PokemonCollection>().Result;
+                        foreach (var item in allItem.Results)
+                        {
+                            Console.WriteLine(item.name);
+                        }
                         Console.WriteLine("Press any key to return to the menu");
                         Console.ReadKey();
                         break;
@@ -89,52 +133,52 @@ namespace BasicApi
                     default:
                         runAgain = false;
                         break;
-                }
             }
         }
-
-        public static void SetUpClient()
-        {
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            client.BaseAddress = new Uri("http://pokeapi.co/api/v2/");
-        }
-
-        public static void GameList()
-        {
-            var allGameResponse = client.GetAsync("generation").Result;
-            GameCollection allGames = allGameResponse.Content.ReadAsAsync<GameCollection>().Result;
-        }
-
-        public static void ItemList()
-        {
-            var allGameResponse = client.GetAsync("item").Result;
-            ItemCollection allItems = allGameResponse.Content.ReadAsAsync<ItemCollection>().Result;
-        }
-
-        public static void PokemonList()
-        {
-            var allPokemonResponse = client.GetAsync("pokemon").Result;
-            PokemonCollection allPokemon = allPokemonResponse.Content.ReadAsAsync<PokemonCollection>().Result;
-        }
-
-        public static  Pokemon GetPokemon(string id)
-        {
-            var response = client.GetAsync($"pokemon/{id}/").Result;
-            return response.Content.ReadAsAsync<Pokemon>().Result;
-
-        }
-
-        public static Game GetGame(string id)
-        {
-            var response = client.GetAsync($"generation/{id}/").Result;
-            return response.Content.ReadAsAsync<Game>().Result;
-        }
-
-        static Item GetItem(string id)
-        {
-            var response = client.GetAsync($"item/{id}/").Result;
-            return response.Content.ReadAsAsync<Item>().Result;
-        }
     }
+
+    public static void SetUpClient()
+    {
+        client.DefaultRequestHeaders.Accept.Clear();
+        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        client.BaseAddress = new Uri("http://pokeapi.co/api/v2/");
+    }
+
+    public static void GameList()
+    {
+        var allGameResponse = client.GetAsync("generation").Result;
+        GameCollection allGames = allGameResponse.Content.ReadAsAsync<GameCollection>().Result;
+    }
+
+    public static void ItemList()
+    {
+        var allGameResponse = client.GetAsync("item").Result;
+        ItemCollection allItems = allGameResponse.Content.ReadAsAsync<ItemCollection>().Result;
+    }
+
+    public static void PokemonList()
+    {
+        var allPokemonResponse = client.GetAsync("pokemon").Result;
+        PokemonCollection allPokemon = allPokemonResponse.Content.ReadAsAsync<PokemonCollection>().Result;
+    }
+
+    public static Pokemon GetPokemon(string id)
+    {
+        var response = client.GetAsync($"pokemon/{id}/").Result;
+        return response.Content.ReadAsAsync<Pokemon>().Result;
+
+    }
+
+    public static Game GetGame(string id)
+    {
+        var response = client.GetAsync($"generation/{id}/").Result;
+        return response.Content.ReadAsAsync<Game>().Result;
+    }
+
+    static Item GetItem(string id)
+    {
+        var response = client.GetAsync($"item/{id}/").Result;
+        return response.Content.ReadAsAsync<Item>().Result;
+    }
+}
 }
